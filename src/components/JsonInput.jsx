@@ -30,7 +30,7 @@ export default function JsonInput({ onJsonChange }) {
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             <button
                 onClick={handleVisualize}
-                className="mt-3 bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded"
+                className="mt-3 bg-blue-500 cursor-pointer hover:bg-blue-600 text-white text-sm py-2 rounded"
             >
                 Visualize
             </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactFlow, {
     Background,
     Controls,
@@ -7,23 +7,25 @@ import ReactFlow, {
     useReactFlow,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import { toPng } from "html-to-image";
 
 function TreeVisualizer({ data, searchPath, darkMode }) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [message, setMessage] = useState("");
     const { setCenter } = useReactFlow();
+    const flowRef = useRef(null);
 
-    const createTree = (obj, parentId = null, depth = 0, xOffset = 0, prefix = "$") => {
+    const createTree = (obj, parentId = null, depth = 0, x = 0, prefix = "$") => {
         const items = [];
-        let index = 0;
+        const spacingX = 220;
+        const spacingY = 140;
+        const keys = Array.isArray(obj) ? obj.map((_, i) => i) : Object.keys(obj);
 
-        for (const key in obj) {
-            const value = obj[key];
-            const id = `${parentId ? parentId + "-" : ""}${key}-${depth}-${index}`;
-            const path = Array.isArray(obj)
-                ? `${prefix}[${key}]`
-                : `${prefix}.${key}`;
+        keys.forEach((key, index) => {
+            const value = Array.isArray(obj) ? obj[index] : obj[key];
+            const nodeId = `${parentId ? parentId + "-" : ""}${key}-${depth}-${index}`;
+            const path = Array.isArray(obj) ? `${prefix}[${key}]` : `${prefix}.${key}`;
             const type = Array.isArray(value)
                 ? "array"
                 : typeof value === "object" && value !== null
@@ -37,10 +39,11 @@ function TreeVisualizer({ data, searchPath, darkMode }) {
                         ? "#bbf7d0"
                         : "#fde68a";
 
+
             items.push({
-                id,
+                id: nodeId,
                 data: { label: `${key}: ${type === "primitive" ? value : ""}`, path },
-                position: { x: xOffset + index * 200, y: depth * 120 },
+                position: { x: x + index * spacingX - (keys.length * spacingX) / 2, y: depth * spacingY },
                 style: {
                     background: color,
                     padding: 8,
@@ -52,30 +55,34 @@ function TreeVisualizer({ data, searchPath, darkMode }) {
                 },
             });
 
+
             if (parentId) {
                 items.push({
-                    id: `${parentId}-${id}`,
+                    id: `edge-${parentId}-${nodeId}`,
                     source: parentId,
-                    target: id,
+                    target: nodeId,
+                    animated: true,
+                    style: { stroke: "#555" },
                 });
             }
+
 
             if (type !== "primitive") {
                 const childItems = createTree(
                     value,
-                    id,
+                    nodeId,
                     depth + 1,
-                    xOffset + index * 200 - 100,
+                    x + index * spacingX,
                     path
                 );
                 items.push(...childItems);
             }
-
-            index++;
-        }
+        });
 
         return items;
     };
+
+
 
     useEffect(() => {
         if (!data) return;
@@ -107,23 +114,51 @@ function TreeVisualizer({ data, searchPath, darkMode }) {
         }
     }, [searchPath]);
 
+    const handleDownloadImage = async () => {
+        console.log("downloading image")
+        if (!flowRef.current) return;
+        try {
+            const dataUrl = await toPng(flowRef.current, { backgroundColor: darkMode ? "#1f2937" : "#f3f4f6" });
+            const link = document.createElement("a");
+            link.download = "tree-visualizer.png";
+            link.href = dataUrl;
+            link.click();
+        } catch (error) {
+            console.error("Error downloading tree image:", error);
+        }
+    };
+
     return (
-        <div className={`w-full h-full relative bg-gray-100 rounded-md ${darkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+        <div className={`w-full h-full relative rounded-md ${darkMode ? "bg-gray-800" : "bg-gray-100"}`} >
             {message && (
                 <div className="absolute top-2 left-2 bg-white dark:bg-gray-700 dark:text-white px-3 py-1 text-sm rounded shadow">
                     {message}
                 </div>
             )}
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                fitView
-            >
-                <Background />
-                <Controls />
-            </ReactFlow>
+            <div className="absolute top-2 right-2 z-50">
+
+                <button
+                    onClick={handleDownloadImage}
+                    className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded shadow"
+                >
+                    Download as Image
+                </button>
+            </div>
+
+            <div ref={flowRef} className="w-full h-full">
+
+
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    fitView
+                >
+                    <Background />
+                    <Controls />
+                </ReactFlow>
+            </div>
         </div>
     );
 }
