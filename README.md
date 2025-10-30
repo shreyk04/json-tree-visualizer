@@ -1,16 +1,30 @@
-# React + Vite
+React Tree Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and interactive Tree Visualizer built using React Flow, Tailwind CSS, and React.
+You can visualize any JSON-like hierarchical data structure as a connected tree, search through nodes, toggle between light/dark themes, and download the visualization as an image.
 
-Currently, two official plugins are available:
+🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+📊 Tree Visualization using React Flow
 
-## React Compiler
+🔍 Search Node with smooth zoom & highlight
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🌗 Light / Dark Theme Toggle
 
-## Expanding the ESLint configuration
+📸 Download Visualization as PNG (includes nodes + edges)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+⚡ Built with Tailwind CSS for minimal & clean styling
+
+🧩 Dynamic Node Generation from nested JSON
+
+🌳 How It Works
+
+The tree structure is generated dynamically from nested JSON data.
+
+Each key/value pair is represented as a node connected via edges.
+
+You can search any node name — if it exists, the view smoothly pans and highlights it.
+
+The Theme Toggle button switches between light and dark modes.
+
+You can download the current visualization (including edges) as an image.
