@@ -139,7 +139,7 @@ function TreeVisualizer({ data, searchPath, darkMode }) {
 
                 <button
                     onClick={handleDownloadImage}
-                    className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded shadow"
+                    className=" bg-blue-500   cursor-pointer hover:bg-blue-600 text-white text-sm px-3 py-2 rounded shadow  "
                 >
                     Download as Image
                 </button>
@@ -154,6 +154,13 @@ function TreeVisualizer({ data, searchPath, darkMode }) {
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     fitView
+                    nodesDraggable={true}
+                    nodesConnectable={false}
+                    elementsSelectable={false}
+                    panOnDrag={true}
+                    zoomOnScroll={true}
+                    zoomOnPinch={true}
+                    zoomOnDoubleClick={false}
                 >
                     <Background />
                     <Controls />

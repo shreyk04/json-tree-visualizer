@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch }) => {
     };
 
     return (
-        <div className="flex gap-2 items-center mb-4">
+        <div className="flex gap-2 items-center mb-4 p-1">
             <input
                 type="text"
                 placeholder="Search by JSON path (e.g., $.user.name)"
