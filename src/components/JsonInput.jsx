@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function JsonInput({ value, onChange, placeholder }) {
+const JsonInput = ({ onVisualize }) => {
+    const [jsonText, setJsonText] = useState("");
+    const [error, setError] = useState("");
+
+    const handleVisualize = () => {
+        try {
+            const parsed = JSON.parse(jsonText);
+            setError("");
+            onVisualize(parsed);
+        } catch (err) {
+            setError("Invalid JSON. Please fix and try again.");
+        }
+    };
+
     return (
-        <div>
-            <label
-                htmlFor="jsonInput"
-                className="block font-medium text-gray-700 mb-2"
-            >
-                Paste or type JSON data
-            </label>
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
+            <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+                JSON Input
+            </h2>
             <textarea
-                id="jsonInput"
-                rows={10}
-                className="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder={placeholder}
-                spellCheck="false"
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-            />
-            <p className="text-xs text-gray-500 mt-1">
-                Tip: Invalid JSON will show an error below.
-            </p>
+                className="w-full h-48 p-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100"
+                placeholder='Paste your JSON here...'
+                value={jsonText}
+                onChange={(e) => setJsonText(e.target.value)}
+            ></textarea>
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            <button
+                onClick={handleVisualize}
+                className="mt-3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
+                Visualize
+            </button>
         </div>
     );
-}
+};
+
+export default JsonInput;
