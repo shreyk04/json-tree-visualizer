@@ -38,7 +38,7 @@ Visualize any JSON-like hierarchical data structure as a connected tree, **searc
 ## 📸 Preview
 
 > https://json-tree-visualizer-nu.vercel.app/
-> ![Tree Visualizer Screenshot](./image.png)
+> ![Tree Visualizer Screenshot](./public/image.png)
 
 ---
 
