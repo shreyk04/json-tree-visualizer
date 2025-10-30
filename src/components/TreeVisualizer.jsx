@@ -8,7 +8,7 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 
-function TreeVisualizer({ data, searchPath }) {
+function TreeVisualizer({ data, searchPath, darkMode }) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [message, setMessage] = useState("");
@@ -108,9 +108,9 @@ function TreeVisualizer({ data, searchPath }) {
     }, [searchPath]);
 
     return (
-        <div className="w-full h-full relative bg-gray-100 rounded-md">
+        <div className={`w-full h-full relative bg-gray-100 rounded-md ${darkMode ? "bg-gray-800" : "bg-gray-100"}`}>
             {message && (
-                <div className="absolute top-2 left-2 bg-white px-3 py-1 text-sm rounded shadow">
+                <div className="absolute top-2 left-2 bg-white dark:bg-gray-700 dark:text-white px-3 py-1 text-sm rounded shadow">
                     {message}
                 </div>
             )}
